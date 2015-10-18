@@ -47,7 +47,7 @@ public class Discnt {
       outputFile = Paths.get(args[1]);
     } else {
       inputFile = Paths.get("discnt.in");
-      outputFile = Paths.get("discnt.in");
+      outputFile = Paths.get("discnt.out");
     }
 
     if (Files.notExists(inputFile)) {
