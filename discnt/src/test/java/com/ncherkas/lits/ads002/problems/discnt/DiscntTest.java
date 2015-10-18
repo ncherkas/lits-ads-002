@@ -5,6 +5,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DiscntTest {
@@ -27,6 +28,16 @@ public class DiscntTest {
           33,
           2.67
       },
+      new Object[] {
+          Arrays.asList(1, 1, 1),
+          0,
+          3
+      },
+      new Object[] {
+          Collections.emptyList(),
+          33,
+          0.0
+      }
     };
   }
 

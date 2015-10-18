@@ -25,16 +25,15 @@ public class Discnt {
           .limit(fullPricesQuantity).unordered()
           .mapToInt(Integer::intValue)
           .sum();
-      double discountedPricesSum = prices.stream()
+      int discountedPricesSum = prices.stream()
           .skip(fullPricesQuantity).unordered()
-          .mapToDouble(price -> price * ((double) (100 - discount) / 100))
+          .mapToInt(Integer::intValue)
           .sum();
 
-      return fullPricesSum + discountedPricesSum;
+      return fullPricesSum + discountedPricesSum * ((double) (100 - discount) / 100);
     }
 
-    return Integer.valueOf(prices.stream().mapToInt(Integer::intValue).sum())
-        .doubleValue();
+    return Integer.valueOf(prices.stream().mapToInt(Integer::intValue).sum()).doubleValue();
   }
 
   /**
