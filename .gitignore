@@ -1,12 +1,29 @@
+# Compiled classes
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Package files
 *.jar
 *.war
 *.ear
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Maven specific entries
+target/
+
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Eclipse specific entries
+.classpath
+.project
+.settings
+.checkstyle
+test-output
+
+# Intelij entries
+*.ipr
+*.iml
+*.iws
+.idea/
+
+# Mac OS X
+.DS_Store
