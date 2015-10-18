@@ -21,19 +21,18 @@ public class Discnt {
       // Each 3rd price is discounted
       int fullPricesQuantity = totalPricesQuantity - totalPricesQuantity / 3;
 
-      int fullPricesSum = prices.stream()
+      long fullPricesSum = prices.stream()
           .limit(fullPricesQuantity).unordered()
-          .mapToInt(Integer::intValue)
+          .mapToLong(Integer::intValue)
           .sum();
-      int discountedPricesSum = prices.stream()
+      long discountedPricesSum = prices.stream()
           .skip(fullPricesQuantity).unordered()
-          .mapToInt(Integer::intValue)
+          .mapToLong(Integer::intValue)
           .sum();
-
       return fullPricesSum + discountedPricesSum * ((double) (100 - discount) / 100);
     }
 
-    return Integer.valueOf(prices.stream().mapToInt(Integer::intValue).sum()).doubleValue();
+    return Long.valueOf(prices.stream().mapToLong(Integer::intValue).sum()).doubleValue();
   }
 
   /**
