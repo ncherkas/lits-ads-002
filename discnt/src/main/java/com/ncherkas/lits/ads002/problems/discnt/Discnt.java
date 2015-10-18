@@ -22,11 +22,11 @@ public class Discnt {
       int fullPricesQuantity = totalPricesQuantity - totalPricesQuantity / 3;
 
       long fullPricesSum = prices.stream()
-          .limit(fullPricesQuantity).unordered()
+          .limit(fullPricesQuantity)
           .mapToLong(Integer::intValue)
           .sum();
       long discountedPricesSum = prices.stream()
-          .skip(fullPricesQuantity).unordered()
+          .skip(fullPricesQuantity)
           .mapToLong(Integer::intValue)
           .sum();
       return fullPricesSum + discountedPricesSum * ((double) (100 - discount) / 100);
