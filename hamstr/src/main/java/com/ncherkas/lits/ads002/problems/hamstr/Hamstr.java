@@ -89,7 +89,7 @@ public class Hamstr {
 
     // TODO: simplify & refactor
     for (int hamsterIdx = 0, dailyFoodAmountSum = 0, greedinessSum = 0, dailyFoodTotalAmount = 0;
-        hamsterIdx < hamsters.size() && dailyFoodTotalAmount < dailyFoodAvailableAmount;
+        hamsterIdx < hamsters.size() && dailyFoodTotalAmount <= dailyFoodAvailableAmount;
         hamsterIdx++) {
 
       HamsterParams hamsterParams = hamsters.get(hamsterIdx);
