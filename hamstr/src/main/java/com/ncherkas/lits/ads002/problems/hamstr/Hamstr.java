@@ -85,8 +85,11 @@ public class Hamstr {
       return hamsters.get(0).getDailyFoodAmount() <= dailyFoodAvailableAmount ? 1 : 0;
     }
 
-    for (int hamsterIdx = 0, dailyFoodAmountSum = 0, greedinessSum = 0;
-        hamsterIdx < hamsters.size();
+    int availableHamstersCounter = 0;
+
+    // TODO: simplify & refactor
+    for (int hamsterIdx = 0, dailyFoodAmountSum = 0, greedinessSum = 0, dailyFoodTotalAmount = 0;
+        hamsterIdx < hamsters.size() && dailyFoodTotalAmount < dailyFoodAvailableAmount;
         hamsterIdx++) {
 
       HamsterParams hamsterParams = hamsters.get(hamsterIdx);
@@ -94,17 +97,13 @@ public class Hamstr {
       dailyFoodAmountSum += hamsterParams.getDailyFoodAmount();
       greedinessSum += hamsterParams.getGrediness();
 
-      int dailyFoodTotalAmount = dailyFoodAmountSum + (greedinessSum * hamsterIdx);
+      dailyFoodTotalAmount = dailyFoodAmountSum + (greedinessSum * hamsterIdx);
 
-      if (dailyFoodTotalAmount >= dailyFoodAvailableAmount) {
-        return dailyFoodTotalAmount > dailyFoodAvailableAmount
-            ? hamsterIdx == 0
-                ? dailyFoodAmountSum <= dailyFoodTotalAmount ? 1 : 0
-                : hamsterIdx
-            : hamsterIdx + 1;
-      }
+      availableHamstersCounter = dailyFoodTotalAmount <= dailyFoodAvailableAmount
+          ? hamsterIdx + 1
+          : hamsterIdx;
     }
 
-    return 0;
+    return availableHamstersCounter;
   }
 }
