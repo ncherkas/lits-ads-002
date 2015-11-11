@@ -51,20 +51,27 @@ public class Hamstr {
           hamsters.add(new HamsterParams(dailyFoodAmount, greediness));
         }
 
-        Comparator<HamsterParams> hamsterFoodAmountComparator = (hamster1, hamster2) -> {
-          int foodAmountComparison = hamster1.getDailyFoodAmount().compareTo(hamster2.getDailyFoodAmount());
-          return foodAmountComparison != 0
-              ? foodAmountComparison
-              : hamster1.getGrediness().compareTo(hamster2.getGrediness());
+        Comparator<HamsterParams> hamsterFoodAmountComparator = new Comparator<HamsterParams>() {
+          @Override
+          public int compare(HamsterParams hamster1, HamsterParams hamster2) {
+            int foodAmountComparison =
+                hamster1.getDailyFoodAmount().compareTo(hamster2.getDailyFoodAmount());
+            return foodAmountComparison != 0
+                ? foodAmountComparison
+                : hamster1.getGrediness().compareTo(hamster2.getGrediness());
+          }
         };
         QuickSort.sort(hamsters, hamsterFoodAmountComparator);
         int hamstersQuantityComparingFood = calculateHamstersQuantity(hamsters, dailyFoodAvailableAmount);
 
-        Comparator<HamsterParams> hamsterGreedinessComparator = (hamster1, hamster2) -> {
-          int greedinessComparison = hamster1.getGrediness().compareTo(hamster2.getGrediness());
-          return greedinessComparison != 0
-              ? greedinessComparison
-              : hamster1.getDailyFoodAmount().compareTo(hamster2.getDailyFoodAmount());
+        Comparator<HamsterParams> hamsterGreedinessComparator = new Comparator<HamsterParams>() {
+          @Override
+          public int compare(HamsterParams hamster1, HamsterParams hamster2) {
+            int greedinessComparison = hamster1.getGrediness().compareTo(hamster2.getGrediness());
+            return greedinessComparison != 0
+                ? greedinessComparison
+                : hamster1.getDailyFoodAmount().compareTo(hamster2.getDailyFoodAmount());
+          }
         };
         QuickSort.sort(hamsters, hamsterGreedinessComparator);
         int hamstersQuantityComparingGreediness = calculateHamstersQuantity(hamsters, dailyFoodAvailableAmount);
