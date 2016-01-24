@@ -16,54 +16,46 @@ public class Wchain {
 
     List<String> words = readInput(inputPath);
     if (!words.isEmpty()) {
-      Map<Integer, List<Pair<String, Integer>>> wordsByLengths = new TreeMap<>();
+      Map<Integer, Map<String, Integer>> wordsByLengths = new TreeMap<>();
       for (String word : words) {
         int wordLength = word.length();
 
         if (!wordsByLengths.containsKey(wordLength)) {
-          wordsByLengths.put(wordLength, new ArrayList<>(2000)); // In order to resize less
+          wordsByLengths.put(wordLength, new HashMap<>());
         }
 
-        Pair<String, Integer> pair = new Pair<>();
-        pair.setKey(word);
-        pair.setValue(1);
-        wordsByLengths.get(wordLength).add(pair);
+        wordsByLengths.get(wordLength).put(word, 1);
       }
 
-      int maxChainSize = 1;
-      Map.Entry<Integer, List<Pair<String, Integer>>> prevWordsByLengthEntry = null;
 
-      for (Map.Entry<Integer, List<Pair<String, Integer>>> wordsByLengthEntry
+      Map.Entry<Integer, Map<String, Integer>> prevWordsByLengthEntry = null;
+      int maxChainSize = 1;
+
+      for (Map.Entry<Integer, Map<String, Integer>> wordsByLengthEntry
           : wordsByLengths.entrySet()) {
 
-        List<Pair<String, Integer>> wordsByLength = wordsByLengthEntry.getValue();
-        int wordsByLengthSize = wordsByLength.size();
-
+        Map<String, Integer> wordsByLength = wordsByLengthEntry.getValue();
         if (prevWordsByLengthEntry != null) {
-          List<Pair<String, Integer>> prevWordsByLength = prevWordsByLengthEntry.getValue();
-          int prevWordsByLengthSize = prevWordsByLength.size();
+          Map<String, Integer> prevWordsByLength = prevWordsByLengthEntry.getValue();
 
-          // Will work faster than iterator
-          for (int prevIdx = 0; prevIdx < prevWordsByLengthSize; prevIdx++) {
-            Pair<String, Integer> prevWordPair = prevWordsByLength.get(prevIdx);
+          for (Map.Entry<String, Integer> wordEntry : wordsByLength.entrySet()) {
+            String word = wordEntry.getKey();
+            StringBuilder wordBuilder = new StringBuilder(word);
 
-            for (int currIdx = 0; currIdx < wordsByLengthSize; currIdx++) {
-              Pair<String, Integer> currentWordPair = wordsByLength.get(currIdx);
+            for (int charPos = 0; charPos < word.length(); charPos++) {
+              char charToRemove = wordBuilder.charAt(charPos);
+              String wordToCheck = wordBuilder.deleteCharAt(charPos).toString();
 
-              String word = currentWordPair.getKey();
-              String prevWord = prevWordPair.getKey();
+              if (prevWordsByLength.containsKey(wordToCheck)) {
+                int currentChainSize = prevWordsByLength.get(wordToCheck) + 1;
+                wordsByLength.put(word, currentChainSize);
 
-              Integer prevWordPairCounter = prevWordPair.getValue();
-              Integer currentWordPairCounter = currentWordPair.getValue();
-
-              if (wordsChained(prevWord, word) && currentWordPairCounter <= prevWordPairCounter) {
-                int incrementedCounter = prevWordPairCounter + 1;
-                currentWordPair.setValue(incrementedCounter);
-
-                if (incrementedCounter > maxChainSize) {
-                  maxChainSize = incrementedCounter;
+                if (currentChainSize > maxChainSize) {
+                  maxChainSize = currentChainSize;
                 }
               }
+
+              wordBuilder.insert(charPos, charToRemove);
             }
           }
         }
@@ -82,34 +74,6 @@ public class Wchain {
     }
   }
 
-  private static boolean wordsChained(String word1, String word2) {
-    int word1Length = word1.length();
-    int word2Length = word2.length();
-
-    int largerWordLength = Math.max(word1Length, word2Length);
-    int smallerWordLength = Math.min(word1Length, word2Length);
-
-    if (word1Length == 0 || word2Length == 0 || largerWordLength - smallerWordLength != 1) {
-      return false;
-    }
-
-    String largerWord = word1Length > word2Length ? word1 : word2;
-    String smallerWord = word1Length < word2Length ? word1 : word2;
-
-    for (int charCounter = 0, diffCounter = 0; charCounter < largerWordLength; charCounter++) {
-      int smallerWordCharPos = charCounter - diffCounter;
-
-      if (smallerWordCharPos < smallerWordLength
-          && largerWord.charAt(charCounter) != smallerWord.charAt(smallerWordCharPos)
-          && ++diffCounter > 1) {
-
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   private static List<String> readInput(Path inputPath) {
     try {
       List<String> lines = Files.readAllLines(inputPath);
@@ -117,28 +81,6 @@ public class Wchain {
       return lines.subList(1, wordsCount + 1);
     } catch (IOException ex) {
       throw new RuntimeException("Failed to read input file", ex);
-    }
-  }
-
-  private static class Pair<K, V> {
-
-    private K key;
-    private V value;
-
-    public K getKey() {
-      return key;
-    }
-
-    public void setKey(K key) {
-      this.key = key;
-    }
-
-    public V getValue() {
-      return value;
-    }
-
-    public void setValue(V value) {
-      this.value = value;
     }
   }
 }
